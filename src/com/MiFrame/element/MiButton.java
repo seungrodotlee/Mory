@@ -26,6 +26,7 @@ public class MiButton extends JButton {
         setBorder(null);
         setBorderPainted(false);
         setContentAreaFilled(false);
+        setFocusPainted(false);
         setOpaque(false);
     }
 }

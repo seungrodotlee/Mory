@@ -2,17 +2,24 @@ package com.MiFrame.ui;
 
 import com.MiFrame.element.MiButton;
 import com.MiFrame.element.MiPanel;
+import com.MiFrame.util.MiFrame;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Sidebar extends MiPanel {
+    MainFrame parent;
+
     private MiPanel ButtonSection, ModeToggler, Toolbar;
     private MiButton FileMenu, FullBtn, MinBtn, CloseBtn;
     private MiButton EditorMode, DesignerMode;
 
-    public Sidebar() {
+    public Sidebar(Component frame) {
+        parent = (MainFrame) frame;
+
         setLayout(MainFrame.GapLessFlowLayout);
         setPreferredSize(new Dimension(136, 0));
         ButtonSectionInit();
@@ -21,6 +28,7 @@ public class Sidebar extends MiPanel {
     }
 
     private void ButtonSectionInit() {
+
         Border btnSpace = BorderFactory.createEmptyBorder(0, 0, 0, 7);
 
         ButtonSection = new MiPanel(MainFrame.GapLessFlowLayout);
@@ -39,6 +47,10 @@ public class Sidebar extends MiPanel {
         ButtonSection.add(FullBtn);
         ButtonSection.add(MinBtn);
         ButtonSection.add(CloseBtn);
+
+        FullBtn.addMouseListener(new FullBtnAdaptor());
+        MinBtn.addMouseListener(new MinBtnAdaptor());
+        CloseBtn.addMouseListener(new CloseBtnAdaptor());
 
         add(ButtonSection);
     }
@@ -63,5 +75,34 @@ public class Sidebar extends MiPanel {
         Toolbar = new MiPanel();
 
         add(Toolbar);
+    }
+
+    class FullBtnAdaptor extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if(parent.getExtendedState() == 0) {
+                parent.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            } else {
+                parent.setExtendedState(JFrame.NORMAL);
+            }
+        }
+    }
+
+    class MinBtnAdaptor extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if(parent.getExtendedState() == 0) {
+                parent.setExtendedState(JFrame.ICONIFIED);
+            } else {
+                parent.setExtendedState(JFrame.NORMAL);
+            }
+        }
+    }
+
+    class CloseBtnAdaptor extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            System.exit(0);
+        }
     }
 }
