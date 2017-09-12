@@ -2,7 +2,6 @@ package com.MiFrame.ui;
 
 import com.MiFrame.element.MiButton;
 import com.MiFrame.element.MiPanel;
-import com.MiFrame.util.MiFrame;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -20,18 +19,18 @@ public class Sidebar extends MiPanel {
     public Sidebar(Component frame) {
         parent = (MainFrame) frame;
 
-        setLayout(MainFrame.GapLessFlowLayout);
+        setLayout(MainFrame.GAPLESSFLOWLAYOUT);
         setPreferredSize(new Dimension(136, 0));
+        setBorder(BorderFactory.createEmptyBorder(0, 21, 0, 0));
         ButtonSectionInit();
         ModeTogglerInit();
         ToolbarInit();
     }
 
     private void ButtonSectionInit() {
-
         Border btnSpace = BorderFactory.createEmptyBorder(0, 0, 0, 7);
 
-        ButtonSection = new MiPanel(MainFrame.GapLessFlowLayout);
+        ButtonSection = new MiPanel(MainFrame.GAPLESSFLOWLAYOUT);
         ButtonSection.setBorder(BorderFactory.createEmptyBorder(13, 0, 0, 0));
 
         FileMenu = new MiButton(new ImageIcon("img/File_Btn.png"));
@@ -56,14 +55,16 @@ public class Sidebar extends MiPanel {
     }
 
     private void ModeTogglerInit() {
-        ModeToggler = new MiPanel(MainFrame.GapLessFlowLayout);
+        ModeToggler = new MiPanel(MainFrame.GAPLESSFLOWLAYOUT);
         ModeToggler.setBackground(ColorPack.LightBlue);
         ModeToggler.setBorder(BorderFactory.createMatteBorder(13, 0, 13, 21, Color.white));
 
         EditorMode = new MiButton(new ImageIcon("img/EditorMode_Btn_Unselected.png"));
         EditorMode.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 1));
+        EditorMode.addMouseListener(new toggleToEditor());
         DesignerMode = new MiButton(new ImageIcon("img/DesignerMode_Btn_Selected.png"));
         DesignerMode.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 2));
+        DesignerMode.addMouseListener(new toggleToDesigner());
 
         ModeToggler.add(EditorMode);
         ModeToggler.add(DesignerMode);
@@ -72,7 +73,8 @@ public class Sidebar extends MiPanel {
     }
 
     private void ToolbarInit() {
-        Toolbar = new MiPanel();
+        Toolbar = new MiPanel(MainFrame.GAPLESSFLOWLAYOUT);
+        Toolbar.setPreferredSize(new Dimension(136, 0));
 
         add(Toolbar);
     }
@@ -103,6 +105,32 @@ public class Sidebar extends MiPanel {
         @Override
         public void mouseClicked(MouseEvent e) {
             System.exit(0);
+        }
+    }
+
+    class toggleToEditor extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if(MainFrame.currentMode == MainFrame.DESIGNER_MODE) {
+
+                EditorMode.setIcon(new ImageIcon("img/EditorMode_Btn_Selected.png"));
+                DesignerMode.setIcon(new ImageIcon("img/DesignerMode_Btn_Unselected.png"));
+
+                parent.toggleMode();
+            }
+        }
+    }
+
+    class toggleToDesigner extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if(MainFrame.currentMode == MainFrame.EDITOR_MODE) {
+
+                EditorMode.setIcon(new ImageIcon("img/EditorMode_Btn_Unselected.png"));
+                DesignerMode.setIcon(new ImageIcon("img/DesignerMode_Btn_Selected.png"));
+
+                parent.toggleMode();
+            }
         }
     }
 }

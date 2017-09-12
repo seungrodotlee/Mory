@@ -1,48 +1,31 @@
 package com.MiFrame.ui;
 
+import org.fife.ui.rtextarea.RTextScrollPane;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MainFrame extends JFrame {
     private Rectangle maxBounds;
 
-    private WorkPane wp;
     private Sidebar side;
+    private Editor editor;
+    private Designer designer;
+    private RTextScrollPane editorPane;
 
-    public final static int EditorMode = 1;
-    public final static int DesignerMode = 2;
+    protected final static int EDITOR_MODE = 1;
+    protected final static int DESIGNER_MODE = 2;
+    protected final static FlowLayout GAPLESSFLOWLAYOUT = new FlowLayout(FlowLayout.CENTER, 0, 0);
 
-
-    private static int Mode = DesignerMode;
-
-    protected final static FlowLayout GapLessFlowLayout = new FlowLayout(FlowLayout.CENTER, 0, 0);
+    protected static int currentMode = DESIGNER_MODE;
 
     public MainFrame() {
-        wp = new WorkPane();
         side = new Sidebar(this);
+        editor = new Editor();
+        designer = new Designer();
+        editorPane = editor.getPane();
 
-        add(wp
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                , BorderLayout.CENTER);
+        add(designer, BorderLayout.CENTER);
         add(side, BorderLayout.EAST);
         Init();
     }
@@ -56,8 +39,25 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
+    protected void toggleMode() {
+        if(currentMode == EDITOR_MODE) {
+            currentMode = DESIGNER_MODE;
+
+            remove(editorPane);
+            add(designer, BorderLayout.CENTER);
+        } else {
+            currentMode = EDITOR_MODE;
+
+            remove(designer);
+            add(editorPane, BorderLayout.CENTER);
+        }
+
+        revalidate();
+        repaint();
+    }
+
     public static Font getNotoSans(int size) {
-        return new Font("Noto Sans KR", Font.PLAIN, size);
+        return new Font("Noto Sans CJK KR", Font.PLAIN, size);
     }
 
     public Rectangle getMaximizedBounds()
