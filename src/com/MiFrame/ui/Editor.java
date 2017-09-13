@@ -2,16 +2,27 @@ package com.MiFrame.ui;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
+import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rtextarea.RTextScrollPane;
+
+import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Editor {
     private RSyntaxTextArea textArea;
     private RTextScrollPane sp;
+    private Timer t = new Timer();
 
     public Editor() {
         textArea = new RSyntaxTextArea(20, 60);
-        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-        textArea.setCodeFoldingEnabled(true);
+
+        setInit();
+
+        textArea.addKeyListener(new AutoCloseParen());
 
         sp = new RTextScrollPane(textArea);
         sp.setBorder(null);
@@ -21,11 +32,41 @@ public class Editor {
         return sp;
     }
 
-    protected void setVisible(boolean b) {
-        if(b) {
-            sp.setVisible(true);
-        } else {
-            sp.setVisible(false);
+    private void setInit() {
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        textArea.setCodeFoldingEnabled(true);
+        textArea.setFont(MainFrame.getD2Coding(12));
+        textArea.setAntiAliasingEnabled(true);
+        textArea.setBracketMatchingEnabled(true);
+
+        // Change a few things here and there.
+        SyntaxScheme scheme = textArea.getSyntaxScheme();
+        scheme.getStyle(Token.RESERVED_WORD).background = Color.pink;
+        scheme.getStyle(Token.DATA_TYPE).foreground = Color.blue;
+        scheme.getStyle(Token.LITERAL_STRING_DOUBLE_QUOTE).underline = true;
+        scheme.getStyle(Token.COMMENT_EOL).font = new Font("D2Coding",
+                Font.ITALIC, 12);
+
+        textArea.revalidate();
+    }
+
+    class AutoCloseParen extends KeyAdapter {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if((e.getModifiers() & 1) != 0){
+                if(e.getKeyCode() == 57) {
+                    System.out.println("( 눌림");
+
+                    TimerTask tt = new TimerTask() {
+                        @Override
+                        public void run() {
+                            textArea.setText(textArea.getText() + ")");
+                        }
+                    };
+
+                    t.schedule(tt, 5);
+                }
+            }
         }
     }
 }

@@ -60,6 +60,10 @@ public class MainFrame extends JFrame {
         return new Font("Noto Sans CJK KR", Font.PLAIN, size);
     }
 
+    public static Font getD2Coding(int size) {
+        return new Font("D2Coding", Font.PLAIN, size);
+    }
+
     public Rectangle getMaximizedBounds()
     {
         return maxBounds;
