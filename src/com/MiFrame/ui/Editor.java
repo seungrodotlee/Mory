@@ -39,7 +39,6 @@ public class Editor {
         textArea.setAntiAliasingEnabled(true);
         textArea.setBracketMatchingEnabled(true);
 
-        // Change a few things here and there.
         SyntaxScheme scheme = textArea.getSyntaxScheme();
         scheme.getStyle(Token.RESERVED_WORD).background = Color.pink;
         scheme.getStyle(Token.DATA_TYPE).foreground = Color.blue;
@@ -50,17 +49,21 @@ public class Editor {
         textArea.revalidate();
     }
 
+    private int cursorPosition;
+
     class AutoCloseParen extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
+            cursorPosition = textArea.getCaretPosition();
+
             if((e.getModifiers() & 1) != 0){
                 if(e.getKeyCode() == 57) {
-                    System.out.println("( 눌림");
-
                     TimerTask tt = new TimerTask() {
+
                         @Override
                         public void run() {
                             textArea.setText(textArea.getText() + ")");
+                            textArea.setCaretPosition(cursorPosition + 1);
                         }
                     };
 

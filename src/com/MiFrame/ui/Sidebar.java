@@ -22,6 +22,7 @@ public class Sidebar extends MiPanel {
         setLayout(MainFrame.GAPLESSFLOWLAYOUT);
         setPreferredSize(new Dimension(136, 0));
         setBorder(BorderFactory.createEmptyBorder(0, 21, 0, 0));
+
         ButtonSectionInit();
         ModeTogglerInit();
         ToolbarInit();
