@@ -57,7 +57,7 @@ public class Sidebar extends MiPanel {
 
     private void ModeTogglerInit() {
         ModeToggler = new MiPanel(MainFrame.GAPLESSFLOWLAYOUT);
-        ModeToggler.setBackground(ColorPack.LightBlue);
+        ModeToggler.setBackground(ColorPack.LIGHT_BLUE);
         ModeToggler.setBorder(BorderFactory.createMatteBorder(13, 0, 13, 21, Color.white));
 
         EditorMode = new MiButton(new ImageIcon("img/EditorMode_Btn_Unselected.png"));
